@@ -57,6 +57,8 @@ public class StudentsLogicTest extends BaseLogicTest {
         testIsStudentsInSameTeam();
         testValidateSections();
         testUpdateStudentCascade();
+        testChangeStudentTeam();
+        testChangeStudentCourse();
     }
 
     private void testValidateSections() throws Exception {
@@ -575,6 +577,43 @@ public class StudentsLogicTest extends BaseLogicTest {
 
         assertThrows(AssertionError.class,
                 () -> studentsLogic.deleteStudentCascade(null, "valid@email.tmt"));
+    }
+
+    @Test
+    private void testChangeStudentCourse() {
+        ______TS("check current course");
+        StudentAttributes student1InCourse1 = dataBundle.students.get("student1InCourse1");
+        String originalCourse = "idOfTypicalCourse1";
+        assertEquals(student1InCourse1.getCourse(), originalCourse);
+
+        ______TS("changed course should not match original course ");
+        String updatedCourse = "testCourse2";
+        student1InCourse1.setCourse(updatedCourse);
+        assertNotEquals(student1InCourse1.getCourse(), originalCourse);
+
+        ______TS("course name should match updated course");
+        assertEquals(student1InCourse1.getCourse(), updatedCourse);
+    }
+
+    @Test
+    private void testChangeStudentTeam() {
+        ______TS("check student not in team");
+
+        StudentAttributes student1InCourse1 = dataBundle.students.get("student1InCourse1");
+        CourseAttributes course1 = dataBundle.courses.get("typicalCourse1");
+        assertFalse(studentsLogic.isStudentInTeam(course1.getId(), "Team 1.2", student1InCourse1.getEmail()));
+
+        ______TS("check true for original team");
+        String oldTeamName = student1InCourse1.getTeam();
+        assertTrue(studentsLogic.isStudentInTeam(course1.getId(), oldTeamName, student1InCourse1.getEmail()));
+
+        ______TS("change student team -- true case");
+        student1InCourse1.setTeam("Team 1.2");
+        assertEquals("Team 1.2", student1InCourse1.getTeam());
+
+        ______TS("team should not equal old teamName");
+        assertNotEquals(oldTeamName, student1InCourse1.getTeam());
+
     }
 
     @Test
