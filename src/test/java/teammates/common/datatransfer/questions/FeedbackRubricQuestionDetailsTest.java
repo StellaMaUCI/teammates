@@ -51,6 +51,19 @@ public class FeedbackRubricQuestionDetailsTest extends BaseTestCase {
     }
 
     @Test
+    public void testValidateQuestionDetails_invalidDescriptionSize_errorReturned() {
+        FeedbackRubricQuestionDetails rubricDetails = new FeedbackRubricQuestionDetails();
+        rubricDetails.setHasAssignedWeights(true);
+        rubricDetails.setRubricSubQuestions(Arrays.asList("SubQn-1", "SubQn-2"));
+        rubricDetails.setRubricChoices(Arrays.asList("Choice-1", "Choice-2"));
+        rubricDetails.setRubricWeightsForEachCell(Arrays.asList(Arrays.asList(1.5, 2.5), Arrays.asList(1.0, 2.0)));
+
+        rubricDetails.setRubricDescriptions(Arrays.asList());
+        List<String> errors = rubricDetails.validateQuestionDetails();
+        assertEquals(FeedbackRubricQuestionDetails.RUBRIC_ERROR_DESC_INVALID_SIZE, errors.get(0));
+    }
+
+    @Test
     public void testValidateResponseDetails_validAnswer_shouldReturnEmptyErrorList() {
         FeedbackRubricQuestionDetails rubricQuestionDetails = new FeedbackRubricQuestionDetails();
         rubricQuestionDetails.setHasAssignedWeights(false);
