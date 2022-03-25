@@ -9,6 +9,8 @@ import org.testng.annotations.Test;
 
 import teammates.test.BaseTestCase;
 
+import static teammates.common.datatransfer.questions.FeedbackRubricQuestionDetails.RUBRIC_MIN_NUM_OF_CHOICES;
+
 /**
  * SUT: {@link FeedbackRubricQuestionDetails}.
  */
@@ -61,6 +63,19 @@ public class FeedbackRubricQuestionDetailsTest extends BaseTestCase {
         rubricDetails.setRubricDescriptions(Arrays.asList());
         List<String> errors = rubricDetails.validateQuestionDetails();
         assertEquals(FeedbackRubricQuestionDetails.RUBRIC_ERROR_DESC_INVALID_SIZE, errors.get(0));
+    }
+
+    @Test
+    public void testValidateQuestionDetails_invalidChoiceSize_errorReturned() {
+        FeedbackRubricQuestionDetails rubricDetails = new FeedbackRubricQuestionDetails();
+        List<String> errors = rubricDetails.validateQuestionDetails();
+        rubricDetails.setHasAssignedWeights(true);
+        rubricDetails.setRubricSubQuestions(Arrays.asList("SubQn-1", "SubQn-2"));
+        rubricDetails.setRubricWeightsForEachCell(Arrays.asList(Arrays.asList(1.5, 2.5), Arrays.asList(1.0, 2.0)));
+
+        rubricDetails.setRubricDescriptions(Arrays.asList());
+        rubricDetails.setRubricChoices(Arrays.asList("Choice-1", "Choice-2"));
+        assertEquals(FeedbackRubricQuestionDetails.RUBRIC_ERROR_NOT_ENOUGH_CHOICES + RUBRIC_MIN_NUM_OF_CHOICES, errors.get(0));
     }
 
     @Test
