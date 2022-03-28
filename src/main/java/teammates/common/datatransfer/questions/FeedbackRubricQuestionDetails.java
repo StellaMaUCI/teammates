@@ -9,7 +9,6 @@ import teammates.common.datatransfer.attributes.FeedbackQuestionAttributes;
  * Contains specific structure and processing logic for rubric feedback questions.
  */
 public class FeedbackRubricQuestionDetails extends FeedbackQuestionDetails {
-
     static final String QUESTION_TYPE_NAME = "Rubric question";
     static final int RUBRIC_ANSWER_NOT_CHOSEN = -1;
     static final int RUBRIC_MIN_NUM_OF_CHOICES = 2;

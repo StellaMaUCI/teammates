@@ -26,6 +26,12 @@ public class FeedbackRubricQuestionDetailsTest extends BaseTestCase {
     }
 
     @Test
+    public void testShouldChangesRequireResponseDeletion_shouldReturnFalse() {
+        FeedbackRubricQuestionDetails newRubricDetails = new  FeedbackRubricQuestionDetails();
+        assertFalse(newRubricDetails.shouldChangesRequireResponseDeletion(newRubricDetails));
+}
+
+    @Test
     public void testValidateQuestionDetails_invalidWeightListSize_errorReturned() {
         FeedbackRubricQuestionDetails rubricDetails = new FeedbackRubricQuestionDetails();
         rubricDetails.setRubricDescriptions(Arrays.asList(Arrays.asList("", ""), Arrays.asList("", "")));
@@ -68,11 +74,12 @@ public class FeedbackRubricQuestionDetailsTest extends BaseTestCase {
     @Test
     public void testValidateQuestionDetails_invalidChoiceSize_errorReturned() {
         FeedbackRubricQuestionDetails rubricDetails = new FeedbackRubricQuestionDetails();
+        List<String> errors = rubricDetails.validateQuestionDetails();
         rubricDetails.setHasAssignedWeights(true);
         rubricDetails.setRubricSubQuestions(Arrays.asList("SubQn-1", "SubQn-2"));
         rubricDetails.setRubricWeightsForEachCell(Arrays.asList(Arrays.asList(1.5, 2.5), Arrays.asList(1.0, 2.0)));
 
-        List<String> errors = rubricDetails.validateQuestionDetails();
+        rubricDetails.setRubricDescriptions(Arrays.asList());
         rubricDetails.setRubricChoices(Arrays.asList("Choice-1", "Choice-2"));
         assertEquals(FeedbackRubricQuestionDetails.RUBRIC_ERROR_NOT_ENOUGH_CHOICES + RUBRIC_MIN_NUM_OF_CHOICES, errors.get(0));
     }
